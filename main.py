@@ -55,6 +55,13 @@ df['regDate_day'] = df['regDate'].apply(lambda x: str(x)[6:8]).astype(np.int32)
 
 df['power'] = df['power'].apply(lambda x: 600 if x > 600 else x)
 
+bin = [i*10 for i in range(31)]
+df['power_bin'] = pd.cut(df['power'], bin, labels=False)
+bin = [i*10 for i in range(24)]
+df['model_bin'] = pd.cut(df['model'], bin, labels=False)
+
+print(df['power_bin'])
+
 v_high_correspondence = ['v_0', 'v_3', 'v_8', 'v_12']
 
 for i in v_high_correspondence:
@@ -83,7 +90,7 @@ test_pd = df[df['price'].isnull()]
 # model = RandomForestRegressor()
 
 model = LGBMRegressor(
-    n_estimators=80000,
+    n_estimators=300000,
     learning_rate=0.02,
     boosting_type='gbdt',
     objective='regression_l1',
